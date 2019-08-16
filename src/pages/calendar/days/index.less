@@ -1,0 +1,44 @@
+.calendar-body > view {
+  height: 80px;
+  display: inline-block;
+  width: 14.28vw;
+  text-align: center;
+  line-height: 80px;
+  color: #828ba6;
+  position: relative;
+}
+.calendar-body {
+  padding-bottom: 10px;
+}
+
+.calendar-body > .calendar-marked > view{
+  background-color: #7096e0;
+  display: block;
+  height: 15px;
+  width: 15px;
+  position: absolute;
+  border-radius: 50%;
+  float: left;
+  left: 50%;
+  top: 60px;
+  transform: translateX(-50%);
+}
+
+//.calendar-body > .calendar-selected::before {
+//  background-color: white !important;
+//}
+
+.calendar-body > .calendar-selected {
+  background-color: #90b1ef;
+  border-radius: 90%;
+  color: white;
+  font-weight: 900;
+}
+
+.calendar-today {
+  font-weight: bolder;
+}
+
+.calendar-body > .not-this-month {
+  color: #e2e5e8 !important;
+}
