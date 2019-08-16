@@ -1,6 +1,6 @@
 {
   "name": "taro-calendar-customizable",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "private": false,
   "description": "可自定义部分样式的taro日历组件",
   "templateInfo": {
