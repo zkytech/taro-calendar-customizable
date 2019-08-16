@@ -1,7 +1,7 @@
 # taro-calendar-customizable
 [![NPM version](https://img.shields.io/npm/v/taro-calendar-customizable.svg)](https://www.npmjs.com/package/taro-calendar-customizable)
 [![Dependencies](https://david-dm.org/zkytech/taro-calendar-customizable.svg)](https://david-dm.org/zkytech/taro-calendar-customizable)
-[![TypeScript](https://badges.frapsoft.com/typescript/code/typescript.png?v=101)](https://www.typescriptlang.org/)
+[![TypeScript](https://badges.frapsoft.com/typescript/love/typescript.svg?v=101)](https://www.typescriptlang.org/)
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 
 可定制标记样式的 `taro` 日历组件。本组件的 UI 设计与接口设计完全参考`taro-ui`中的`calendar`组件。暂不支持`范围选择`。
