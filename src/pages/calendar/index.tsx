@@ -2,7 +2,12 @@ import { Picker, View, Swiper, SwiperItem } from '@tarojs/components';
 import Taro, { Component } from '@tarojs/taro';
 import './index.less';
 import { formatDate } from './utils';
-import Days from './days/index';
+import Days, {
+  CalendarDateInfo,
+  CustomStyles,
+  StyleGeneratorParams
+} from './days/index';
+import {CSSProperties} from "react";
 
 export type CalendarMark = {
   /** 要标记的日期 */
@@ -13,7 +18,7 @@ export type CalendarMark = {
   markSize?: string;
 };
 
-type IProps = {
+export type IProps = {
   /** 要标记的日期列表 YYYY-MM-DD */
   marks?: CalendarMark[];
   /** 点击回调 */
@@ -34,11 +39,35 @@ type IProps = {
   maxDate?: string;
   /** 选中日期的背景色 */
   selectedDateColor?: string;
+  /** 是否显示农历 */
+  mode?: 'normal' | 'lunar';
+  /** 是否显示分割线 */
+  showDivider?: boolean;
+  /** 是否范围选择模式 */
+  isMultiSelect?: boolean;
   /** 月份改变回调 */
   onMonthChange?: (value: string) => any;
   onClickPreMonth?: () => any;
   onClickNextMonth?: () => any;
+  onSelectDate?: (value: { start: string; end: string }) => any;
+  /** 自定义样式生成器 */
+  customStyleGenerator?: (dateInfo: StyleGeneratorParams) => CustomStyles;
+  /** 头部整体样式 */
+  headStyle?:CSSProperties,
+  /** 头部单元格样式 */
+  headCellStyle?:CSSProperties,
+  /** body整体样式 */
+  bodyStyle?:CSSProperties,
+  /** 左箭头样式 */
+  leftArrowStyle?:CSSProperties,
+  /** 右箭头样式 */
+  rightArrowStyle?:CSSProperties,
+  /** 日期选择器样式 */
+  datePickerStyle?:CSSProperties,
+  /** 日期选择器&左右箭头 所在容器样式 */
+  pickerRowStyle?:CSSProperties
 };
+
 type IState = {
   /** 当前年月YYYY-MM */
   current: string;
@@ -46,6 +75,8 @@ type IState = {
   selectedDate: string;
   /** 当前显示的轮播图index */
   currentCarouselIndex: number;
+  /** 范围选择 */
+  selectedRange: { start: string; end: string };
 };
 
 export default class Calendar extends Component<IProps, IState> {
@@ -56,7 +87,8 @@ export default class Calendar extends Component<IProps, IState> {
   state: IState = {
     current: formatDate(new Date(), 'month'),
     selectedDate: Calendar.defaultProps.currentDate as string,
-    currentCarouselIndex: 1
+    currentCarouselIndex: 1,
+    selectedRange: { start: '', end: '' }
   };
 
   public static defaultProps: Partial<IProps> = {
@@ -66,7 +98,11 @@ export default class Calendar extends Component<IProps, IState> {
     selectedDateColor: '#90b1ef',
     hideArrow: false,
     isSwiper: true,
-    minDate: '1970-01-01'
+    minDate: '1970-01-01',
+    mode: 'normal',
+    maxDate: '2100-12-31',
+    showDivider: false,
+    isMultiSelect: false
   };
   componentWillReceiveProps(nextProps: Readonly<IProps>): void {
     if (
@@ -77,9 +113,22 @@ export default class Calendar extends Component<IProps, IState> {
     }
   }
 
-  onClickDate = value => {
-    const { onDayClick } = this.props;
-    let { current, currentCarouselIndex } = this.state;
+  onClickDate = (value: CalendarDateInfo) => {
+    const { onDayClick, onSelectDate } = this.props;
+    let { current, currentCarouselIndex, selectedRange } = this.state;
+    if (!selectedRange.start || selectedRange.end) {
+      selectedRange = { start: value.fullDateStr, end: '' };
+    } else {
+      if (new Date(selectedRange.start) > new Date(value.fullDateStr)) {
+        selectedRange = {
+          start: value.fullDateStr,
+          end: selectedRange.start
+        };
+      } else {
+        selectedRange.end = value.fullDateStr;
+      }
+    }
+
     if (!value.currentMonth) {
       // 点到非本月的日期就跳转到相应月份
       let dateObj = new Date(value.fullDateStr);
@@ -88,16 +137,20 @@ export default class Calendar extends Component<IProps, IState> {
       } else {
         currentCarouselIndex = (currentCarouselIndex + 2) % 3;
       }
-      this.setState({
-        selectedDate: value.fullDateStr,
-        currentCarouselIndex,
-        current: formatDate(dateObj, 'month')
-      });
-    } else {
-      this.setState({ selectedDate: value.fullDateStr });
+
+      current = formatDate(dateObj, 'month');
     }
+    this.setState({
+      selectedDate: value.fullDateStr,
+      selectedRange,
+      currentCarouselIndex,
+      current
+    });
     if (onDayClick) {
       onDayClick({ value: value.fullDateStr });
+    }
+    if (onSelectDate) {
+      onSelectDate(selectedRange);
     }
   };
 
@@ -122,7 +175,12 @@ export default class Calendar extends Component<IProps, IState> {
   };
 
   render() {
-    const { current, selectedDate, currentCarouselIndex } = this.state;
+    const {
+      current,
+      selectedDate,
+      currentCarouselIndex,
+      selectedRange
+    } = this.state;
     const {
       marks,
       isVertical,
@@ -131,20 +189,36 @@ export default class Calendar extends Component<IProps, IState> {
       isSwiper,
       minDate,
       maxDate,
-      onDayLongPress
+      onDayLongPress,
+      mode,
+      showDivider,
+      isMultiSelect,
+      customStyleGenerator,
+      headStyle,
+      headCellStyle,
+      bodyStyle,
+      leftArrowStyle,
+      rightArrowStyle,
+      datePickerStyle,
+      pickerRowStyle
     } = this.props;
+
+    // 配合Swiper组件实现无限滚动
+    // 原理：永远保持当前屏幕显示月份的左边是前一个月，右边是后一个月
+    // current即当前月份，currentCarouselIndex即当前显示页面的index。一共3个页面，index分别为0 1 2 。
+    // Swiper的无限循环就是类似0 1 2 0 1 2 这样。如果currentCarouselIndex是2 那么我只要保证 1显示的是前面一个月，0显示的是后面一个月 就完成了循环。
     const currentMonth = new Date(current);
     const preMonth = new Date(current);
     preMonth.setMonth(currentMonth.getMonth() - 1);
     const nextMonth = new Date(current);
     nextMonth.setMonth(currentMonth.getMonth() + 1);
-
     const preIndex = (currentCarouselIndex + 2) % 3;
     const nextIndex = (currentCarouselIndex + 1) % 3;
     let monthObj: Date[] = [];
     monthObj[currentCarouselIndex] = currentMonth;
     monthObj[preIndex] = preMonth;
     monthObj[nextIndex] = nextMonth;
+    // 所有Days组件的公共Props
     const publicDaysProp = {
       marks: marks ? marks : [],
       onClick: this.onClickDate,
@@ -152,16 +226,23 @@ export default class Calendar extends Component<IProps, IState> {
       minDate: minDate as string,
       maxDate,
       selectedDateColor,
-      onDayLongPress
+      onDayLongPress,
+      mode: mode as 'normal' | 'lunar',
+      showDivider: showDivider as boolean,
+      isMultiSelect: isMultiSelect as boolean,
+      selectedRange: selectedRange,
+      customStyleGenerator,
+
     };
 
     return (
-      <View>
-        <View className="calendar-picker">
+      <View >
+        <View className="calendar-picker" style={pickerRowStyle} >
           {hideArrow ? (
             ''
           ) : (
             <View
+              style={leftArrowStyle}
               className="calendar-arrow-left"
               onClick={() => {
                 this.setState({
@@ -172,11 +253,13 @@ export default class Calendar extends Component<IProps, IState> {
             />
           )}
           <Picker
-            style={{ display: 'inline-block', lineHeight: '25px' }}
+            style={{ display: 'inline-block', lineHeight: '25px' ,...datePickerStyle}}
             mode="date"
             onChange={e => this.setState({ current: e.detail.value })}
             value={current}
             fields="month"
+            start={minDate}
+            end={maxDate}
           >
             {current.replace('-', '年').concat('月')}
           </Picker>
@@ -184,6 +267,7 @@ export default class Calendar extends Component<IProps, IState> {
             ''
           ) : (
             <View
+              style={rightArrowStyle}
               className="calendar-arrow-right"
               onClick={() => {
                 this.setState({
@@ -195,13 +279,14 @@ export default class Calendar extends Component<IProps, IState> {
           )}
         </View>
 
-        <View className="calendar-head">
+        <View className="calendar-head" style={headStyle}>
           {['日', '一', '二', '三', '四', '五', '六'].map(value => (
-            <View key={value}>{value}</View>
+            <View style={headCellStyle} key={value}>{value}</View>
           ))}
         </View>
         {isSwiper ? (
           <Swiper
+            style={bodyStyle}
             vertical={isVertical}
             circular
             current={currentCarouselIndex}
@@ -218,7 +303,7 @@ export default class Calendar extends Component<IProps, IState> {
                 this.setState({ currentCarouselIndex: e.detail.current });
               }
             }}
-            style={{ height: '245px' }}
+            className={'calendar-swiper'}
           >
             <SwiperItem>
               <Days date={monthObj[0]} {...publicDaysProp} />
@@ -232,7 +317,7 @@ export default class Calendar extends Component<IProps, IState> {
             </SwiperItem>
           </Swiper>
         ) : (
-          <Days date={currentMonth} {...publicDaysProp} />
+          <Days bodyStyle={bodyStyle} date={currentMonth} {...publicDaysProp} />
         )}
       </View>
     );

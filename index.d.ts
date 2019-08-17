@@ -1,4 +1,6 @@
 import { ComponentClass } from 'react';
+import { IProps } from './src/pages/calendar/index';
+import { CalendarToolResult } from './src/pages/calendar/utils';
 
 export declare type CalendarMark = {
   /** 要标记的日期 */
@@ -9,32 +11,24 @@ export declare type CalendarMark = {
   markSize?: string;
 };
 
-type IProps = {
-  /** 要标记的日期列表 YYYY-MM-DD */
-  marks?: CalendarMark[];
-  /** 点击回调 */
-  onDayClick?: (item: { value: string }) => any;
-  /** 长按回调（触发长按事件时不会触发点击事件） */
-  onDayLongPress?: (item: { value: string }) => any;
-  /** 当前时间 YYYY-MM-DD*/
-  currentDate?: string;
-  /** 隐藏箭头 */
-  hideArrow?: boolean;
-  /** 是否可以滑动 */
-  isSwiper?: boolean;
-  /** 滑动方向 */
-  isVertical?: boolean;
-  /** 最小的可选时间 */
-  minDate?: string;
-  /** 最大的可选时间 */
-  maxDate?: string;
-  /** 选中日期的背景色 */
-  selectedDateColor?: string;
-  /** 月份改变回调 */
-  onMonthChange?: (value: string) => any;
-  onClickPreMonth?: () => any;
-  onClickNextMonth?: () => any;
-};
+export declare namespace CalendarTools {
+  /** 公历转农历
+   * @param date 日期字符串 YYYY-MM-DD
+   */
+  export function solar2lunar(date: string): CalendarToolResult;
+  /** 农历转公历
+   * @param y 年
+   * @param m 月
+   * @param d 日
+   * @param isLeapMonth 是否是闰月
+   */
+  export function lunar2solar(
+    y: number,
+    m: number,
+    d: number,
+    isLeapMonth: boolean
+  ): CalendarToolResult;
+}
 
 declare const Calendar: ComponentClass<IProps>;
 

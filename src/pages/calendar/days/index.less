@@ -1,44 +1,83 @@
-.calendar-body > view {
-  height: 80px;
+.calendar-body>view {
+  height: 3rem;
   display: inline-block;
-  width: 14.28vw;
+  width: 14.28%;
   text-align: center;
-  line-height: 80px;
+
   color: #828ba6;
   position: relative;
+  font-size: 1rem;
+
 }
+
+.calendar-body>.calendar-line-divider {
+  border-top: 1px dashed rgba(0, 0, 0, 0.1);
+}
+
 .calendar-body {
   padding-bottom: 10px;
 }
 
-.calendar-body > .calendar-marked > view{
-  background-color: #7096e0;
-  display: block;
-  height: 15px;
-  width: 15px;
-  position: absolute;
-  border-radius: 50%;
-  float: left;
-  left: 50%;
-  top: 60px;
-  transform: translateX(-50%);
-}
-
-//.calendar-body > .calendar-selected::before {
-//  background-color: white !important;
-//}
-
-.calendar-body > .calendar-selected {
+.calendar-body>.calendar-selected>.calendar-date {
+  display: inline-block;
   background-color: #90b1ef;
-  border-radius: 90%;
+  width: 2.3rem;
+  height: 1.3rem;
+  position: relative;
+  border-radius: 50%;
   color: white;
-  font-weight: 900;
 }
+
+.calendar-range>.calendar-date {
+  background-color: #90b1ef;
+  color: white;
+}
+
+.calendar-range-end>.calendar-date {
+  border-top-right-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+}
+
+.calendar-range-start>.calendar-date {
+  border-top-left-radius: 1rem;
+  border-bottom-left-radius: 1rem;
+}
+
 
 .calendar-today {
   font-weight: bolder;
 }
 
-.calendar-body > .not-this-month {
+.calendar-body>.not-this-month {
   color: #e2e5e8 !important;
+}
+
+.calendar-body>view>.lunar-day {
+  display: inline-block;
+  font-size: 18px;
+  position: absolute;
+  top: 1.2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0.7;
+  width: 2rem;
+}
+
+.calendar-body>view>.lunar-month {
+  text-decoration-color: red;
+  text-decoration-line: underline;
+}
+
+.calendar-body>.calendar-marked>.calendar-mark {
+  position: absolute;
+  background-color: #7096e0;
+  display: block;
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  float: left;
+  left: 50%;
+
+  transform: translateX(-50%);
+
 }

@@ -1,3 +1,6 @@
-import Calendar from './src/pages/calendar/index'
+import Calendar from './src/pages/calendar/index';
+import { CalendarTools } from './src/pages/calendar/utils';
 
-export default Calendar
+export { CalendarTools };
+
+export default Calendar;
