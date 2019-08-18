@@ -240,6 +240,7 @@ export default Index;
 | pickerRowStyle       | 日期选择器&左右箭头 所在容器样式 | `CSSProperties`                                                                            |
 
 进行样式定制时可以参考组件内部结构图：
+
 ![结构图](src/preview/样式结构.png)
 
 ## 类型说明
