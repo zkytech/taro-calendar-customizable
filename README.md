@@ -12,6 +12,7 @@
 - 支持农历显示
 - 支持周视图
 - 可完全自定义控制器
+- 可指定一周的起点
 
 > ## 安装
 
@@ -258,6 +259,7 @@ export default Index;
 | marked       | 是否标记                                                                        | `boolean`                             |
 | multiSelect  | 多选模式参数                                                                    | [MultiSelectParam](#MultiSelectParam) |
 | lunar        | 农历信息（仅在农历模式下生效）                                                  | [LunarInfo](#LunarInfo) 或 `null`     |
+| startDay     | 指定周几为一行的起点，0 为周日，1 为周一                                        | `number`                              |
 
 > ### CustomStyles
 

@@ -1,5 +1,5 @@
 import { Picker, View, Swiper, SwiperItem } from '@tarojs/components';
-import Taro, { Component, FunctionComponent } from '@tarojs/taro';
+import Taro, { Component } from '@tarojs/taro';
 import './index.less';
 import { formatDate, fillWithZero } from './utils';
 import Days, {
@@ -51,8 +51,11 @@ export type IProps = {
   isMultiSelect?: boolean;
   /** 月份/周改变回调 */
   onCurrentViewChange?: (value: string) => any;
+  /** 点击左箭头 */
   onClickPre?: () => any;
+  /** 点击右箭头 */
   onClickNext?: () => any;
+  /** 范围选择完成时的回调 */
   onSelectDate?: (value: { start: string; end: string }) => any;
   /** 自定义样式生成器 */
   customStyleGenerator?: (dateInfo: StyleGeneratorParams) => CustomStyles;
@@ -73,9 +76,11 @@ export type IProps = {
   /** 视图 月/周 */
   view?: 'month' | 'week';
   /** 日期选择器文本生成器 */
-  pickerTextGenerator: (currentView: Date) => string;
+  pickerTextGenerator?: (currentView: Date) => string;
   /** 父组件通过ref可以调用内部方法 */
-  bindRef: (ref: Calendar) => any;
+  bindRef?: (ref: Calendar) => any;
+  /** 指定周几为一行的起点，0为周日*/
+  startDay?: number;
 };
 
 type IState = {
@@ -87,6 +92,18 @@ type IState = {
   currentCarouselIndex: number;
   /** 范围选择 */
   selectedRange: { start: string; end: string };
+};
+
+const getWeekDayList = (startDay: number) => {
+  const weekDays = ['日', '一', '二', '三', '四', '五', '六'];
+  let result: string[] = [];
+  for (let i = startDay; i < 7; i++) {
+    result.push(weekDays[i]);
+  }
+  for (let i = 0; i < startDay; i++) {
+    result.push(weekDays[i]);
+  }
+  return result;
 };
 
 export default class Calendar extends Component<IProps, IState> {
@@ -115,7 +132,8 @@ export default class Calendar extends Component<IProps, IState> {
     showDivider: false,
     isMultiSelect: false,
     view: 'month',
-    currentView: formatDate(new Date())
+    currentView: formatDate(new Date()),
+    startDay: 0
   };
   componentWillMount() {
     if (this.props.bindRef) {
@@ -296,7 +314,9 @@ export default class Calendar extends Component<IProps, IState> {
       pickerRowStyle,
       view,
       pickerTextGenerator,
-      hideController
+      hideController,
+      onCurrentViewChange,
+      startDay
     } = this.props;
     // 配合Swiper组件实现无限滚动
     // 原理：永远保持当前屏幕显示月份的左边是前一个月，右边是后一个月
@@ -336,7 +356,8 @@ export default class Calendar extends Component<IProps, IState> {
       isMultiSelect: isMultiSelect as boolean,
       selectedRange: selectedRange,
       customStyleGenerator,
-      view: view as 'month' | 'week'
+      view: view as 'month' | 'week',
+      startDay: startDay as number
     };
 
     return (
@@ -361,7 +382,13 @@ export default class Calendar extends Component<IProps, IState> {
                 ...datePickerStyle
               }}
               mode="date"
-              onChange={e => this.setState({ current: e.detail.value })}
+              onChange={e => {
+                const currentDate = formatDate(new Date(e.detail.value));
+                this.setState({ current: currentDate });
+                if (onCurrentViewChange) {
+                  onCurrentViewChange(currentDate);
+                }
+              }}
               value={current}
               fields="month"
               start={minDate}
@@ -389,7 +416,7 @@ export default class Calendar extends Component<IProps, IState> {
         )}
 
         <View className="calendar-head" style={headStyle}>
-          {['日', '一', '二', '三', '四', '五', '六'].map(value => (
+          {getWeekDayList(startDay as number).map(value => (
             <View style={headCellStyle} key={value}>
               {value}
             </View>

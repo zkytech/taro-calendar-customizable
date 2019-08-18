@@ -15,12 +15,24 @@ export type CalendarDateInfo = {
 };
 
 /**
+ * 计算current增加add天后是周几
+ * @param current 当前是第几天
+ * @param add 要加多少天
+ */
+const calcWeekDay = (current: number, add: number) => {
+  return (current + add) % 7;
+};
+
+/**
  * 获取当月的date列表
  * @param month 从1开始计数的月份
+ * @param startDay 一行的起点  比如以周一为起点 此时startDay = 1，以周日为起点，此时startDay = 0
  */
-const getDateListByMonth = (date: Date) => {
+const getDateListByMonth = (date: Date, startDay: number) => {
   const month = date.getMonth();
   const year = date.getFullYear();
+  /** 一周的最后一天 */
+  const weekEndDay = calcWeekDay(startDay, 6);
   let result: CalendarDateInfo[] = [];
   /** 先获取该月份的起点 */
   date.setDate(1);
@@ -29,7 +41,7 @@ const getDateListByMonth = (date: Date) => {
   dateObj.setDate(1);
 
   /** 前面一部分非当前月的日期 */
-  for (let day = 0; day < date.getDay(); day++) {
+  for (let day = startDay; day != date.getDay(); day = calcWeekDay(day, 1)) {
     dateObj.setFullYear(year);
     dateObj.setMonth(month);
     dateObj.setDate(date.getDate() - (date.getDay() - day));
@@ -49,7 +61,7 @@ const getDateListByMonth = (date: Date) => {
     date.setDate(date.getDate() + 1);
   }
   /** 后面一部分非当前月的日期 */
-  for (let day = date.getDay(); day <= 6; day++) {
+  for (let day = date.getDay(); day != weekEndDay; day = calcWeekDay(day, 1)) {
     result.push({
       date: date.getDate(),
       currentMonth: false,
@@ -57,8 +69,18 @@ const getDateListByMonth = (date: Date) => {
     });
     date.setDate(date.getDate() + 1);
   }
+  result.push({
+    date: date.getDate(),
+    currentMonth: false,
+    fullDateStr: formatDate(date, 'day')
+  });
   if (result.length === 35) {
-    for (let day = date.getDay(); day <= 6; day++) {
+    date.setDate(date.getDate() + 1);
+    for (
+      let day = date.getDay();
+      day != weekEndDay;
+      day = calcWeekDay(day, 1)
+    ) {
       result.push({
         date: date.getDate(),
         currentMonth: false,
@@ -66,15 +88,22 @@ const getDateListByMonth = (date: Date) => {
       });
       date.setDate(date.getDate() + 1);
     }
+    result.push({
+      date: date.getDate(),
+      currentMonth: false,
+      fullDateStr: formatDate(date, 'day')
+    });
   }
   return result;
 };
 
 /** 获取指定日期所在周的所有天 */
-const getDateListByWeek = (date: Date) => {
-  date.setDate(date.getDate() - date.getDay());
+const getDateListByWeek = (date: Date, startDay) => {
+  date.setDate(date.getDate() - ((date.getDay() - startDay + 7) % 7));
+  /** 一周的最后一天 */
+  const weekEndDay = calcWeekDay(startDay, 6);
   let result: CalendarDateInfo[] = [];
-  while (date.getDay() < 6) {
+  while (date.getDay() !== weekEndDay) {
     result.push({
       date: date.getDate(),
       currentMonth: true,
@@ -156,6 +185,8 @@ export type DaysProps = {
   bodyStyle?: CSSProperties;
   /** 视图模式 */
   view: 'month' | 'week';
+  /** 一行的开始 0代表周日*/
+  startDay: number;
 };
 
 const Days: FunctionComponent<DaysProps> = ({
@@ -173,7 +204,8 @@ const Days: FunctionComponent<DaysProps> = ({
   selectedRange,
   customStyleGenerator,
   bodyStyle,
-  view
+  view,
+  startDay
 }) => {
   // @ts-ignore
   const dateObj = date ? new Date(date) : new Date();
@@ -182,10 +214,10 @@ const Days: FunctionComponent<DaysProps> = ({
   const maxDateObj = new Date(maxDate ? maxDate : new Date());
   let days: CalendarDateInfo[] = [];
   if (view === 'month') {
-    days = getDateListByMonth(dateObj);
+    days = getDateListByMonth(dateObj, startDay);
   }
   if (view === 'week') {
-    days = getDateListByWeek(dateObj);
+    days = getDateListByWeek(dateObj, startDay);
   }
   const today = formatDate(new Date(), 'day');
   const markDateList = marks ? marks.map(value => value.value) : [];

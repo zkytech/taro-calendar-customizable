@@ -2,6 +2,8 @@ import Taro, { FunctionComponent, useState } from '@tarojs/taro';
 import Calendar from './calendar/index';
 import { View, Button, Text, Switch } from '@tarojs/components';
 
+// TODO:自定义周几是起点
+
 const Index: FunctionComponent = () => {
   const [calendarObj, setCalendarObj] = useState<Calendar>();
   const [currentView, setCurrentView] = useState('2019-08-18');
@@ -15,6 +17,7 @@ const Index: FunctionComponent = () => {
         bindRef={ref => {
           setCalendarObj(ref);
         }}
+        startDay={2}
         hideController={hideController}
         currentView={currentView}
         onCurrentViewChange={setCurrentView}
