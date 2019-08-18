@@ -50,7 +50,7 @@ export default Index;
 
 > ### 样式定制
 
-这里展示了最简单的样式设置方式，具体到日期单元格样式的定制可以使用[customStyleGenerator](#样式定制参数)
+这里展示了最简单的样式设置方式，[点击查看效果](#样式定制演示)，具体到日期单元格样式的定制可以使用[customStyleGenerator](#样式定制参数)
 
 ```typescript jsx
 import Taro, { FunctionComponent } from '@tarojs/taro';
@@ -99,6 +99,8 @@ export default Index;
 ```
 
 > ### 自定义控制器
+
+这里通过`bindRef`方法获取到了`Calendar`的实例，通过调用内部方法`goNext()`以及`goPrev()`实现了翻页控制。[查看效果](#周视图、自定义控制器演示)
 
 ```typescript JSX
 import Taro, { FunctionComponent, useState } from '@tarojs/taro';
@@ -172,9 +174,23 @@ const Index: FunctionComponent = () => {
 export default Index;
 ```
 
-![静态](src/preview/静态预览.png)![样式定制](src/preview/样式定制.png)
+#### 自定义标记
 
-![滑动](src/preview/滑动展示.gif)![范围选择](src/preview/范围选择.gif)
+![静态](src/preview/静态预览.png)
+
+#### 样式定制演示
+
+![样式定制](src/preview/样式定制.png)
+
+#### 滑动/切换动画演示
+
+![滑动](src/preview/滑动展示.gif)
+
+#### 范围选择演示
+
+![范围选择](src/preview/范围选择.gif)
+
+#### 周视图、自定义控制器演示
 
 ![自定义控制器](src/preview/自定义控制器.gif)
 
