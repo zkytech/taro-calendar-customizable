@@ -2,12 +2,7 @@ import { View } from '@tarojs/components';
 import Taro, { FunctionComponent } from '@tarojs/taro';
 import './index.less';
 import { CSSProperties } from 'react';
-import {
-  formatDate,
-  indexOf,
-  CalendarTools,
-  LunarInfo
-} from '../utils';
+import { formatDate, indexOf, CalendarTools, LunarInfo } from '../utils';
 import { CalendarMark } from '../index';
 
 export type CalendarDateInfo = {
@@ -75,6 +70,26 @@ const getDateListByMonth = (date: Date) => {
   return result;
 };
 
+/** 获取指定日期所在周的所有天 */
+const getDateListByWeek = (date: Date) => {
+  date.setDate(date.getDate() - date.getDay());
+  let result: CalendarDateInfo[] = [];
+  while (date.getDay() < 6) {
+    result.push({
+      date: date.getDate(),
+      currentMonth: true,
+      fullDateStr: formatDate(date, 'day')
+    });
+    date.setDate(date.getDate() + 1);
+  }
+  result.push({
+    date: date.getDate(),
+    currentMonth: true,
+    fullDateStr: formatDate(date, 'day')
+  });
+  return result;
+};
+
 export type StyleGeneratorParams = {
   /** 当前月的第几天1 ~ 31 */
   date: number;
@@ -138,7 +153,9 @@ export type DaysProps = {
   /** 自定义样式生成器 */
   customStyleGenerator?: (dateInfo: StyleGeneratorParams) => CustomStyles;
   /** 自定义Calendar Body样式 */
-  bodyStyle?:CSSProperties
+  bodyStyle?: CSSProperties;
+  /** 视图模式 */
+  view: 'month' | 'week';
 };
 
 const Days: FunctionComponent<DaysProps> = ({
@@ -155,21 +172,27 @@ const Days: FunctionComponent<DaysProps> = ({
   isMultiSelect,
   selectedRange,
   customStyleGenerator,
-  bodyStyle
+  bodyStyle,
+  view
 }) => {
   // @ts-ignore
   const dateObj = date ? new Date(date) : new Date();
   const minDateObj = new Date(minDate);
   // @ts-ignore
-
   const maxDateObj = new Date(maxDate ? maxDate : new Date());
-  const days = getDateListByMonth(dateObj);
+  let days: CalendarDateInfo[] = [];
+  if (view === 'month') {
+    days = getDateListByMonth(dateObj);
+  }
+  if (view === 'week') {
+    days = getDateListByWeek(dateObj);
+  }
   const today = formatDate(new Date(), 'day');
   const markDateList = marks ? marks.map(value => value.value) : [];
   const startDateObj = new Date(selectedRange ? selectedRange.start : '');
   const endDateObj = new Date(selectedRange ? selectedRange.end : '');
   return (
-    <View className="calendar-body"  style={bodyStyle}>
+    <View className="calendar-body" style={bodyStyle}>
       {days.map(value => {
         const markIndex = indexOf(markDateList, value.fullDateStr);
         let disable = false;
@@ -308,14 +331,12 @@ const Days: FunctionComponent<DaysProps> = ({
             <View
               className="calendar-mark"
               style={{
-                      backgroundColor:
-                      markIndex === -1 ? '' : marks[markIndex].color,
-                      height: markIndex === -1 ? '' : marks[markIndex].markSize,
-                      width: markIndex === -1 ? '' : marks[markIndex].markSize,
-                      top:mode==='lunar'?'2.0rem':'1.5rem',
-                      ...customStyles.markStyle
-                    }
-              }
+                backgroundColor: markIndex === -1 ? '' : marks[markIndex].color,
+                height: markIndex === -1 ? '' : marks[markIndex].markSize,
+                width: markIndex === -1 ? '' : marks[markIndex].markSize,
+                top: mode === 'lunar' ? '2.0rem' : '1.5rem',
+                ...customStyles.markStyle
+              }}
             />
           </View>
         );

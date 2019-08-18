@@ -1,3 +1,8 @@
+/** 填充0 */
+export const fillWithZero = (target: number | string, length: number) => {
+  return (Array(length).join('0') + target).slice(-length);
+};
+
 /**
  * 默认将日期格式化为 YYYY-MM-DD
  * @param date Date类型的时间
@@ -9,9 +14,9 @@ export const formatDate = (
 ) => {
   const yearStr = date.getFullYear();
   const month = date.getMonth() + 1;
-  const monthStr = (Array(2).join('0') + month).slice(-2);
+  const monthStr = fillWithZero(month, 2);
   const day = date.getDate();
-  const dayStr = (Array(2).join('0') + day).slice(-2);
+  const dayStr = fillWithZero(day, 2);
   switch (field) {
     case 'year':
       return `${yearStr}`;

@@ -1,10 +1,14 @@
 .calendar-head>view {
-  height: 80px;
+  height: 2rem;
   display: inline-block;
   width: 14.28%;
   text-align: center;
-  line-height: 80px;
+  line-height: 2rem;
   color: #bfbfd1;
+}
+
+.calendar-head {
+  font-size: 1rem;
 }
 
 .calendar-picker {
@@ -14,20 +18,26 @@
   width: fit-content;
 }
 
-.calendar-swiper {
-  height: 19rem;
-}
+
 
 .calendar-arrow-right,
 .calendar-arrow-left {
-  height: 39px;
-  width: 39px;
+  height: 1rem;
+  width: 1rem;
   display: inline-block;
   background-repeat: no-repeat;
   background-size: 100% 100%;
   position: relative;
-  top: 8px;
+  top: 0.2rem;
   opacity: 0.3;
+}
+
+.calendar-arrow-left {
+  right: 0.5rem;
+}
+
+.calendar-arrow-right {
+  left: 0.5rem;
 }
 
 .calendar-disabled-arrow {

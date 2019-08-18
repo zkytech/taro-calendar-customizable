@@ -1,27 +1,67 @@
-import Taro, { FunctionComponent } from '@tarojs/taro';
+import Taro, { FunctionComponent, useState } from '@tarojs/taro';
 import Calendar from './calendar/index';
-import { View } from '@tarojs/components';
-// TODO:1.单行模式（仅显示本周的7天） 2.周月年视图切换
+import { View, Button, Text, Switch } from '@tarojs/components';
 
 const Index: FunctionComponent = () => {
+  const [calendarObj, setCalendarObj] = useState<Calendar>();
+  const [currentView, setCurrentView] = useState('2019-08-18');
+  const [selected, setSelected] = useState('2019-08-18');
+  const [isWeekView, setIsWeekView] = useState(false);
+  const [hideController, setHideController] = useState(false);
   return (
     <View>
       <Calendar
-        marks={[
-          { value: '2019-08-11', color: 'red', markSize: '9px' },
-          { value: '2019-08-12', color: 'pink', markSize: '9px' },
-          { value: '2019-08-13', color: 'gray', markSize: '9px' },
-          { value: '2019-08-14', color: 'yellow', markSize: '9px' },
-          { value: '2019-08-15', color: 'darkblue', markSize: '9px' },
-          { value: '2019-08-16', color: 'pink', markSize: '9px' },
-          { value: '2019-08-17', color: 'green', markSize: '9px' }
-        ]}
-        mode="lunar"
-        isMultiSelect
-        selectedDateColor="#346fc2"
-        onDayClick={item => console.log(item)}
-        onDayLongPress={item => console.log(item)}
+        view={isWeekView ? 'week' : 'month'}
+        bindRef={ref => {
+          setCalendarObj(ref);
+        }}
+        hideController={hideController}
+        currentView={currentView}
+        onCurrentViewChange={setCurrentView}
+        selectedDate={selected}
+        onDayClick={item => setSelected(item.value)}
       />
+      <Text style={{ display: 'block', width: '100vw', textAlign: 'center' }}>
+        {currentView.slice(0, 7)}
+      </Text>
+      <Button
+        onClick={() => {
+          calendarObj ? calendarObj.goPre() : '';
+        }}
+        style={{ width: '50%', display: 'inline-block' }}
+      >
+        上一页
+      </Button>
+      <Button
+        onClick={() => {
+          calendarObj ? calendarObj.goNext() : '';
+        }}
+        style={{ width: '50%', display: 'inline-block' }}
+      >
+        下一页
+      </Button>
+      <Button onClick={() => setCurrentView('2019-08')}>
+        设置view为2019-08
+      </Button>
+      <Button onClick={() => setSelected('2019-08-08')}>选中2019-08-08</Button>
+      <Switch
+        checked={isWeekView}
+        onChange={e => {
+          // @ts-ignore
+          setIsWeekView(e.target.value);
+        }}
+      >
+        周视图
+      </Switch>
+      <Switch
+        checked={hideController}
+        onChange={e => {
+          // @ts-ignore
+          setHideController(e.target.value);
+        }}
+      >
+        隐藏控制器
+      </Switch>
     </View>
   );
 };
