@@ -1,5 +1,5 @@
 import { Picker, View, Swiper, SwiperItem } from '@tarojs/components';
-import Taro, { Component } from '@tarojs/taro';
+import Taro, { Component, FunctionComponent } from '@tarojs/taro';
 import './index.less';
 import { formatDate } from './utils';
 import Days, {
@@ -7,7 +7,7 @@ import Days, {
   CustomStyles,
   StyleGeneratorParams
 } from './days/index';
-import {CSSProperties} from "react";
+import { CSSProperties } from 'react';
 
 export type CalendarMark = {
   /** 要标记的日期 */
@@ -53,19 +53,20 @@ export type IProps = {
   /** 自定义样式生成器 */
   customStyleGenerator?: (dateInfo: StyleGeneratorParams) => CustomStyles;
   /** 头部整体样式 */
-  headStyle?:CSSProperties,
+  headStyle?: CSSProperties;
   /** 头部单元格样式 */
-  headCellStyle?:CSSProperties,
+  headCellStyle?: CSSProperties;
   /** body整体样式 */
-  bodyStyle?:CSSProperties,
+  bodyStyle?: CSSProperties;
   /** 左箭头样式 */
-  leftArrowStyle?:CSSProperties,
+  leftArrowStyle?: CSSProperties;
   /** 右箭头样式 */
-  rightArrowStyle?:CSSProperties,
+  rightArrowStyle?: CSSProperties;
   /** 日期选择器样式 */
-  datePickerStyle?:CSSProperties,
+  datePickerStyle?: CSSProperties;
   /** 日期选择器&左右箭头 所在容器样式 */
-  pickerRowStyle?:CSSProperties
+  pickerRowStyle?: CSSProperties;
+  CustomHeader?: React.ComponentClass<any>;
 };
 
 type IState = {
@@ -200,7 +201,8 @@ export default class Calendar extends Component<IProps, IState> {
       leftArrowStyle,
       rightArrowStyle,
       datePickerStyle,
-      pickerRowStyle
+      pickerRowStyle,
+      CustomHeader
     } = this.props;
 
     // 配合Swiper组件实现无限滚动
@@ -231,13 +233,12 @@ export default class Calendar extends Component<IProps, IState> {
       showDivider: showDivider as boolean,
       isMultiSelect: isMultiSelect as boolean,
       selectedRange: selectedRange,
-      customStyleGenerator,
-
+      customStyleGenerator
     };
 
     return (
-      <View >
-        <View className="calendar-picker" style={pickerRowStyle} >
+      <View>
+        <View className="calendar-picker" style={pickerRowStyle}>
           {hideArrow ? (
             ''
           ) : (
@@ -253,7 +254,11 @@ export default class Calendar extends Component<IProps, IState> {
             />
           )}
           <Picker
-            style={{ display: 'inline-block', lineHeight: '25px' ,...datePickerStyle}}
+            style={{
+              display: 'inline-block',
+              lineHeight: '25px',
+              ...datePickerStyle
+            }}
             mode="date"
             onChange={e => this.setState({ current: e.detail.value })}
             value={current}
@@ -281,7 +286,9 @@ export default class Calendar extends Component<IProps, IState> {
 
         <View className="calendar-head" style={headStyle}>
           {['日', '一', '二', '三', '四', '五', '六'].map(value => (
-            <View style={headCellStyle} key={value}>{value}</View>
+            <View style={headCellStyle} key={value}>
+              {value}
+            </View>
           ))}
         </View>
         {isSwiper ? (

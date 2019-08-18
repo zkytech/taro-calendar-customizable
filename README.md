@@ -50,7 +50,7 @@ export default Index;
 
 >### 样式定制
 
-这里展示了最简单的样式设置方式，具体到日期单元格样式的定制可以使用[customStyleGenerator](#样式定制)
+这里展示了最简单的样式设置方式，具体到日期单元格样式的定制可以使用[customStyleGenerator](#样式定制参数)
 ```typescript jsx
 import  Taro,{ FunctionComponent } from '@tarojs/taro';
 import Calendar from './calendar/index';
@@ -89,21 +89,18 @@ export default Index;
 
 > ## 参数说明
 
-| 参数                 | 说明                               | 类型                                                                      | 默认值       |
-| -------------------- | ---------------------------------- | ------------------------------------------------------------------------- | ------------ |
-| mode                 | 显示模式，普通或农历               | `"normal"`&#124;`"lunar"`                                                          | `"normal"`     |
-| currentDate          | 当前时间，格式：`YYYY-MM-DD`       | `string`                                                                  | `Date.now()` |
-| minDate              | 最小的可选时间，格式：`YYYY-MM-DD` | `string`                                                                  | `1970-01-01` |
-| maxDate              | 最大的可选时间，格式：`YYYY-MM-DD` | `string`                                                                  | `null`       |
-| isSwiper             | 是否可以滑动                       | `boolean`                                                                 | `true`       |
-| marks                | 需要标记的时间                     | `Array<{value:string,color:string,markSize:string}>`                      | `[]`         |
-| hideArrow            | 是否隐藏箭头                       | `boolean`                                                                 | `false`      |
-| isVertical           | 是否垂直滑动                       | `boolean`                                                                 | `false`      |
-| isMultiSelect        | 是否范围选择                       | `boolean`                                                                 | `false`      |
-| showDivider          | 是否显示分割线                     | `boolean`                                                                 | `false`      |
-
-
-
+| 参数          | 说明                               | 类型                                                 | 默认值       |
+| ------------- | ---------------------------------- | ---------------------------------------------------- | ------------ |
+| mode          | 显示模式，普通或农历               | `"normal"`&#124;`"lunar"`                            | `"normal"`   |
+| currentDate   | 当前时间，格式：`YYYY-MM-DD`       | `string`                                             | `Date.now()` |
+| minDate       | 最小的可选时间，格式：`YYYY-MM-DD` | `string`                                             | `1970-01-01` |
+| maxDate       | 最大的可选时间，格式：`YYYY-MM-DD` | `string`                                             | `null`       |
+| isSwiper      | 是否可以滑动                       | `boolean`                                            | `true`       |
+| marks         | 需要标记的时间                     | `Array<{value:string,color:string,markSize:string}>` | `[]`         |
+| hideArrow     | 是否隐藏箭头                       | `boolean`                                            | `false`      |
+| isVertical    | 是否垂直滑动                       | `boolean`                                            | `false`      |
+| isMultiSelect | 是否范围选择                       | `boolean`                                            | `false`      |
+| showDivider   | 是否显示分割线                     | `boolean`                                            | `false`      |
 
 
 > ## 事件说明
@@ -117,18 +114,22 @@ export default Index;
 | onMonthChange    | 月份改变时触发                         | `(value: string) => any`       |
 | onSelectDate     | 选中日期时候触发                       | `(value: SelectDate) => any`   |
 
-## 样式定制
 
-| 参数             | 说明                                   | 类型                           |
-| ---------------- | -------------------------------------- | ------------------------------ |
-| customStyleGenerator | 自定义单元格样式生成器                   | (dateInfo:[StyleGeneratorParams](#StyleGeneratorParams) ) => [CustomStyles](#CustomStyles) |
-| headStyle|head整体样式|`CSSProperties`|
-| headCellStyle|head单元格样式|`CSSProperties`|
-| bodyStyle|body整体样式|`CSSProperties`|
-| leftArrowStyle|左箭头样式|`CSSProperties`|
-| rightArrowStyle|右箭头样式|`CSSProperties`|
-| datePickerStyle|日期选择器样式|`CSSProperties`|
-| pickerRowStyle|日期选择器&左右箭头 所在容器样式|`CSSProperties`|
+>## 样式定制参数
+
+| 参数                 | 说明                             | 类型                                                                                       |
+| -------------------- | -------------------------------- | ------------------------------------------------------------------------------------------ |
+| customStyleGenerator | 自定义单元格样式生成器           | (dateInfo:[StyleGeneratorParams](#StyleGeneratorParams) ) => [CustomStyles](#CustomStyles) |
+| headStyle            | head整体样式                     | `CSSProperties`                                                                            |
+| headCellStyle        | head单元格样式                   | `CSSProperties`                                                                            |
+| bodyStyle            | body整体样式                     | `CSSProperties`                                                                            |
+| leftArrowStyle       | 左箭头样式                       | `CSSProperties`                                                                            |
+| rightArrowStyle      | 右箭头样式                       | `CSSProperties`                                                                            |
+| datePickerStyle      | 日期选择器样式                   | `CSSProperties`                                                                            |
+| pickerRowStyle       | 日期选择器&左右箭头 所在容器样式 | `CSSProperties`                                                                            |
+进行样式定制时可以参考组件内部结构图：
+![结构图](src/preview/样式结构.png)
+
 
 ## 类型说明
 
@@ -136,37 +137,37 @@ export default Index;
 
 每个单元格包含的所有信息
 
-| 参数         | 说明                                                                    | 类型                                                |
-| ------------ | ----------------------------------------------------------------------- | --------------------------------------------------- |
-| date         | 当前月的第几天1 ~ 31                                                    | `number`                                            |
-| currentMonth | 是否是属于当前显示的月份（比如7月31日不属于8月，但是会显示在8月这一页） | `boolean`                                           |
-| fullDateStr  | 时间 YYYY-MM-DD                                                         | `string`                                            |
-| selected     | 是否被选中                                                              | `boolean`                                           |
-| marked       | 是否标记                                                                | `boolean`                                           |
-| multiSelect  | 多选模式参数                                                            | [MultiSelectParam](#MultiSelectParam)               |
-| lunar        | 农历信息（仅在农历模式下生效）                                          | [LunarInfo](#LunarInfo) 或 `null` |
+| 参数         | 说明                                                                    | 类型                                  |
+| ------------ | ----------------------------------------------------------------------- | ------------------------------------- |
+| date         | 当前月的第几天1 ~ 31                                                    | `number`                              |
+| currentMonth | 是否是属于当前显示的月份（比如7月31日不属于8月，但是会显示在8月这一页） | `boolean`                             |
+| fullDateStr  | 时间 YYYY-MM-DD                                                         | `string`                              |
+| selected     | 是否被选中                                                              | `boolean`                             |
+| marked       | 是否标记                                                                | `boolean`                             |
+| multiSelect  | 多选模式参数                                                            | [MultiSelectParam](#MultiSelectParam) |
+| lunar        | 农历信息（仅在农历模式下生效）                                          | [LunarInfo](#LunarInfo) 或 `null`     |
 
 >### CustomStyles
 
 样式生成器返回结果
 
-| 参数         | 说明                                                                    | 类型                                                |
-| ------------ | ----------------------------------------------------------------------- | --------------------------------------------------- |
-|lunarStyle|农历样式|`CSSProperties`|
-|dateStyle|日期样式|`CSSProperties`|
-|markStyle|标记样式|`CSSProperties`|
-|containerStyle|容器单元格样式|`CSSProperties`|
+| 参数           | 说明           | 类型            |
+| -------------- | -------------- | --------------- |
+| lunarStyle     | 农历样式       | `CSSProperties` |
+| dateStyle      | 日期样式       | `CSSProperties` |
+| markStyle      | 标记样式       | `CSSProperties` |
+| containerStyle | 容器单元格样式 | `CSSProperties` |
 
 
 >### MultiSelectParam
 
 多选模式参数
 
-| 参数 | 说明 | 类型 |
-| ---- | ---- | ---- |
-| multiSelected  | 是否在选择范围内 | `boolean` |
-| multiSelectedStar | 是否是选择起点 | `boolean`        |
-| multiSelectedEnd  | 是否是选择终点 | `boolean`        |
+| 参数              | 说明             | 类型      |
+| ----------------- | ---------------- | --------- |
+| multiSelected     | 是否在选择范围内 | `boolean` |
+| multiSelectedStar | 是否是选择起点   | `boolean` |
+| multiSelectedEnd  | 是否是选择终点   | `boolean` |
 
 
 >### LunarInfo
@@ -198,6 +199,7 @@ export default Index;
 > 农历信息的生成使用的是[calendar.js](https://github.com/jjonline/calendar.js)，可直接调用农历信息生成工具
 
 农历生成工具调用
+
 ```typescript
 import {CalendarTools} from 'taro-calendar-customizable';
 
