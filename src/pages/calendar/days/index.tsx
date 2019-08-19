@@ -3,7 +3,7 @@ import Taro, { FunctionComponent } from '@tarojs/taro';
 import './index.less';
 import { CSSProperties } from 'react';
 import { formatDate, indexOf, CalendarTools, LunarInfo } from '../utils';
-import { CalendarMark } from '../index';
+import { CalendarMark, ExtraInfo } from '../index';
 
 export type CalendarDateInfo = {
   /** 当前月的第几天1 ~ 31 */
@@ -25,7 +25,7 @@ const calcWeekDay = (current: number, add: number) => {
 
 /**
  * 获取当月的date列表
- * @param month 从1开始计数的月份
+ * @param date 属于目标月份的Date对象
  * @param startDay 一行的起点  比如以周一为起点 此时startDay = 1，以周日为起点，此时startDay = 0
  */
 const getDateListByMonth = (date: Date, startDay: number) => {
@@ -97,8 +97,11 @@ const getDateListByMonth = (date: Date, startDay: number) => {
   return result;
 };
 
-/** 获取指定日期所在周的所有天 */
-const getDateListByWeek = (date: Date, startDay) => {
+/** 获取指定日期所在周的所有天
+ * @param date 属于目标星期的Date对象
+ * @param startDay 一行的起点  比如以周一为起点 此时startDay = 1，以周日为起点，此时startDay = 0
+ */
+const getDateListByWeek = (date: Date, startDay: number) => {
   date.setDate(date.getDate() - ((date.getDay() - startDay + 7) % 7));
   /** 一周的最后一天 */
   const weekEndDay = calcWeekDay(startDay, 6);
@@ -161,6 +164,8 @@ export type DaysProps = {
   onClick: (info: CalendarDateInfo) => any;
   /** 长按回调（触发长按事件时不会触发点击事件） */
   onDayLongPress?: (item: { value: string }) => any;
+  /** 额外信息 */
+  extraInfo: ExtraInfo[];
   /** 要标记的日期 */
   marks: CalendarMark[];
   /** 选定的日期 */
@@ -205,7 +210,8 @@ const Days: FunctionComponent<DaysProps> = ({
   customStyleGenerator,
   bodyStyle,
   view,
-  startDay
+  startDay,
+  extraInfo
 }) => {
   // @ts-ignore
   const dateObj = date ? new Date(date) : new Date();
@@ -221,32 +227,45 @@ const Days: FunctionComponent<DaysProps> = ({
   }
   const today = formatDate(new Date(), 'day');
   const markDateList = marks ? marks.map(value => value.value) : [];
+  const extraInfoDateList = extraInfo
+    ? extraInfo.map(value => value.value)
+    : [];
   const startDateObj = new Date(selectedRange ? selectedRange.start : '');
   const endDateObj = new Date(selectedRange ? selectedRange.end : '');
   return (
     <View className="calendar-body" style={bodyStyle}>
       {days.map(value => {
         const markIndex = indexOf(markDateList, value.fullDateStr);
+        const extraInfoIndex = indexOf(extraInfoDateList, value.fullDateStr);
         let disable = false;
         let className: string[] = [];
 
         if (!value.currentMonth) {
+          // 非本月
           className.push('not-this-month');
         }
         if (
           selectedDate === value.fullDateStr &&
           !(isMultiSelect && selectedRange.end)
         ) {
+          // 选中
           // 范围选择模式显示已选范围时，不显示selected
           className.push('calendar-selected');
         }
         if (markIndex !== -1) {
+          // 标记
           className.push('calendar-marked');
         }
+        if (extraInfoIndex !== -1) {
+          // 额外信息
+          className.push('calendar-extra-info');
+        }
         if (value.fullDateStr === today) {
+          // 当天
           className.push('calendar-today');
         }
         if (showDivider) {
+          // 分割线
           className.push('calendar-line-divider');
         }
         let isInRange = false;
@@ -259,13 +278,16 @@ const Days: FunctionComponent<DaysProps> = ({
             valueDateTimestamp >= startDateObj.getTime() &&
             valueDateTimestamp <= endDateObj.getTime()
           ) {
+            // 被选择（范围选择）
             className.push('calendar-range');
             isInRange = true;
             if (valueDateTimestamp === startDateObj.getTime()) {
+              // 范围起点
               rangeStart = true;
               className.push('calendar-range-start');
             }
             if (valueDateTimestamp === endDateObj.getTime()) {
+              // 范围终点
               rangeEnd = true;
               className.push('calendar-range-end');
             }
@@ -291,6 +313,7 @@ const Days: FunctionComponent<DaysProps> = ({
         }
         let customStyles: CustomStyles = {};
         if (customStyleGenerator) {
+          // 用户定制样式
           const generatorParams: StyleGeneratorParams = {
             ...value,
             lunar: lunarDayInfo,
@@ -333,6 +356,7 @@ const Days: FunctionComponent<DaysProps> = ({
                     }
               }
             >
+              {/* 日期 */}
               {value.date}
             </View>
             {mode === 'normal' ? (
@@ -342,6 +366,7 @@ const Days: FunctionComponent<DaysProps> = ({
                 className={lunarClassName.join(' ')}
                 style={customStyles.lunarStyle}
               >
+                {/* 农历 */}
                 {(() => {
                   if (!lunarDayInfo) {
                     return;
@@ -360,6 +385,7 @@ const Days: FunctionComponent<DaysProps> = ({
                 })()}
               </View>
             )}
+            {/* 标记 */}
             <View
               className="calendar-mark"
               style={{
@@ -370,6 +396,26 @@ const Days: FunctionComponent<DaysProps> = ({
                 ...customStyles.markStyle
               }}
             />
+            {extraInfoIndex === -1 ? (
+              ''
+            ) : (
+              <View
+                className="calendar-extra-info"
+                style={{
+                  color:
+                    extraInfoIndex === -1
+                      ? ''
+                      : extraInfo[extraInfoIndex].color,
+                  fontSize:
+                    extraInfoIndex === -1
+                      ? ''
+                      : extraInfo[extraInfoIndex].fontSize
+                }}
+              >
+                {/* 额外信息 */}
+                {extraInfo[extraInfoIndex].text}
+              </View>
+            )}
           </View>
         );
       })}

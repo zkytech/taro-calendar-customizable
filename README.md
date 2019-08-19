@@ -38,6 +38,11 @@ const Index: FunctionComponent = () => {
         { value: '2019-08-16', color: 'pink', markSize: '9px' },
         { value: '2019-08-17', color: 'green', markSize: '9px' }
       ]}
+      extraInfo={[
+        { value: '2019-08-21', text: '生日', color: 'red' },
+        { value: '2019-08-22', text: '休假', color: 'darkblue' },
+        { value: '2019-08-23', text: '会议', color: 'gray' }
+      ]}
       mode="lunar"
       selectedDateColor="#346fc2"
       onDayClick={item => console.log(item)}
@@ -197,22 +202,23 @@ export default Index;
 
 > ## 参数说明
 
-| 参数           | 说明                                                                       | 类型                                                 | 默认值           |
-| -------------- | -------------------------------------------------------------------------- | ---------------------------------------------------- | ---------------- |
-| mode           | 显示模式，普通或农历                                                       | `"normal"`&#124;`"lunar"`                            | `"normal"`       |
-| view           | 视图模式                                                                   | `"week"`&#124;`"month"`                              | `"month"`        |
-| selectedDate   | 当前选中的时间，格式：`YYYY-MM-DD`                                         | `string`                                             | `Date.now()`     |
-| currentView    | 当前视图显示的月份`YYYY-MM`                                                | `string`                                             | 当前系统时间年月 |
-| minDate        | 最小的可选时间，格式：`YYYY-MM-DD`                                         | `string`                                             | `1970-01-01`     |
-| maxDate        | 最大的可选时间，格式：`YYYY-MM-DD`                                         | `string`                                             | `null`           |
-| isSwiper       | 是否可以滑动                                                               | `boolean`                                            | `true`           |
-| isVertical     | 是否垂直滑动                                                               | `boolean`                                            | `false`          |
-| isMultiSelect  | 是否范围选择                                                               | `boolean`                                            | `false`          |
-| marks          | 需要标记的时间                                                             | `Array<{value:string,color:string,markSize:string}>` | `[]`             |
-| hideArrow      | 是否隐藏箭头                                                               | `boolean`                                            | `false`          |
-| hideController | 是否显示控制器                                                             | `false`                                              | `boolean`        |
-| showDivider    | 是否显示分割线                                                             | `boolean`                                            | `false`          |
-| bindRef        | 父组件通过 ref 可以调用内部方法，主要用于实现[自定义控制器](#自定义控制器) | `(ref:Calendar)=>any`                                | -                |
+| 参数           | 说明                                                                       | 类型                                                             | 默认值           |
+| -------------- | -------------------------------------------------------------------------- | ---------------------------------------------------------------- | ---------------- |
+| mode           | 显示模式，普通或农历                                                       | `"normal"`&#124;`"lunar"`                                        | `"normal"`       |
+| view           | 视图模式                                                                   | `"week"`&#124;`"month"`                                          | `"month"`        |
+| selectedDate   | 当前选中的时间，格式：`YYYY-MM-DD`                                         | `string`                                                         | `Date.now()`     |
+| currentView    | 当前视图显示的月份`YYYY-MM`                                                | `string`                                                         | 当前系统时间年月 |
+| minDate        | 最小的可选时间，格式：`YYYY-MM-DD`                                         | `string`                                                         | `1970-01-01`     |
+| maxDate        | 最大的可选时间，格式：`YYYY-MM-DD`                                         | `string`                                                         | `null`           |
+| isSwiper       | 是否可以滑动                                                               | `boolean`                                                        | `true`           |
+| isVertical     | 是否垂直滑动                                                               | `boolean`                                                        | `false`          |
+| isMultiSelect  | 是否范围选择                                                               | `boolean`                                                        | `false`          |
+| marks          | 需要标记的时间                                                             | `Array<{value:string,color:string,markSize:string}>`             | `[]`             |
+| extraInfo      | 额外信息                                                                   | `Array<{value:string,text:string,color:string,fontSize:string}>` | `[]`             |
+| hideArrow      | 是否隐藏箭头                                                               | `boolean`                                                        | `false`          |
+| hideController | 是否显示控制器                                                             | `false`                                                          | `boolean`        |
+| showDivider    | 是否显示分割线                                                             | `boolean`                                                        | `false`          |
+| bindRef        | 父组件通过 ref 可以调用内部方法，主要用于实现[自定义控制器](#自定义控制器) | `(ref:Calendar)=>any`                                            | -                |
 
 > ## 事件说明
 

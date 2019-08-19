@@ -10,7 +10,7 @@ import Days, {
 import { CSSProperties } from 'react';
 
 export type CalendarMark = {
-  /** 要标记的日期 */
+  /** 要标记的日期 YYYY-MM-DD*/
   value: string;
   /** 标记颜色 */
   color?: string;
@@ -18,7 +18,20 @@ export type CalendarMark = {
   markSize?: string;
 };
 
+export type ExtraInfo = {
+  /** 要标记的日期 YYYY-MM-DD*/
+  value: string;
+  /** 额外信息文本 */
+  text: string;
+  /** 颜色 */
+  color?: string;
+  /** 文字大小 */
+  fontSize?: string;
+};
+
 export type IProps = {
+  /** 额外信息 */
+  extraInfo?: ExtraInfo[];
   /** 要标记的日期列表 YYYY-MM-DD */
   marks?: CalendarMark[];
   /** 点击回调 */
@@ -133,7 +146,8 @@ export default class Calendar extends Component<IProps, IState> {
     isMultiSelect: false,
     view: 'month',
     currentView: formatDate(new Date()),
-    startDay: 0
+    startDay: 0,
+    extraInfo: []
   };
   componentWillMount() {
     if (this.props.bindRef) {
@@ -316,7 +330,8 @@ export default class Calendar extends Component<IProps, IState> {
       pickerTextGenerator,
       hideController,
       onCurrentViewChange,
-      startDay
+      startDay,
+      extraInfo
     } = this.props;
     // 配合Swiper组件实现无限滚动
     // 原理：永远保持当前屏幕显示月份的左边是前一个月，右边是后一个月
@@ -357,7 +372,8 @@ export default class Calendar extends Component<IProps, IState> {
       selectedRange: selectedRange,
       customStyleGenerator,
       view: view as 'month' | 'week',
-      startDay: startDay as number
+      startDay: startDay as number,
+      extraInfo: extraInfo ? extraInfo : []
     };
 
     return (
