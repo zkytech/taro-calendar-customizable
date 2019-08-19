@@ -133,6 +133,8 @@ export type StyleGeneratorParams = {
   selected: boolean;
   /** 是否标记 */
   marked: boolean;
+  /** 是否含有额外信息 */
+  hasExtraInfo: boolean;
   /** 多选模式选项 */
   multiSelect: {
     /** 是否在选择范围内 */
@@ -155,6 +157,8 @@ export type CustomStyles = {
   markStyle?: CSSProperties;
   /** 容器单元格样式 */
   containerStyle?: CSSProperties;
+  /** 额外信息样式 */
+  extraInfoStyle?: CSSProperties;
 };
 
 export type DaysProps = {
@@ -323,7 +327,8 @@ const Days: FunctionComponent<DaysProps> = ({
               multiSelectedStar: rangeStart,
               multiSelectedEnd: rangeEnd
             },
-            marked: markIndex !== -1
+            marked: markIndex !== -1,
+            hasExtraInfo: extraInfoIndex !== -1
           };
           customStyles = customStyleGenerator(generatorParams);
         }
@@ -409,7 +414,8 @@ const Days: FunctionComponent<DaysProps> = ({
                   fontSize:
                     extraInfoIndex === -1
                       ? ''
-                      : extraInfo[extraInfoIndex].fontSize
+                      : extraInfo[extraInfoIndex].fontSize,
+                  ...customStyles.extraInfoStyle
                 }}
               >
                 {/* 额外信息 */}

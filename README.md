@@ -263,6 +263,7 @@ export default Index;
 | fullDateStr  | 时间 YYYY-MM-DD                                                                 | `string`                              |
 | selected     | 是否被选中                                                                      | `boolean`                             |
 | marked       | 是否标记                                                                        | `boolean`                             |
+| hasExtraInfo | 是否含有额外信息                                                                | `boolean`                             |
 | multiSelect  | 多选模式参数                                                                    | [MultiSelectParam](#MultiSelectParam) |
 | lunar        | 农历信息（仅在农历模式下生效）                                                  | [LunarInfo](#LunarInfo) 或 `null`     |
 | startDay     | 指定周几为一行的起点，0 为周日，1 为周一                                        | `number`                              |
@@ -277,6 +278,7 @@ export default Index;
 | dateStyle      | 日期样式       | `CSSProperties` |
 | markStyle      | 标记样式       | `CSSProperties` |
 | containerStyle | 容器单元格样式 | `CSSProperties` |
+| extraInfoStyle | 额外信息样式   | `CSSProperties` |
 
 > ### MultiSelectParam
 
