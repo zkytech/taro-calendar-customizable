@@ -308,7 +308,7 @@ export default Index;
 | nWeek    | 一周的第几天 1~7         | `number`         |
 | ncWeek   | 星期 (例:'星期五)        | `string`         |
 
-> 农历信息的生成使用的是[calendar.js](https://github.com/jjonline/calendar.js)，可直接调用农历信息生成工具
+> 农历信息的生成使用的是[calendar.js](https://github.com/jjonline/calendar.js?_blank)，可直接调用农历信息生成工具
 
 农历生成工具调用
 
