@@ -247,7 +247,7 @@ export default class Calendar extends Component<IProps, IState> {
     }
   };
 
-  goNext = (fromClick: boolean = true) => {
+  goNext = () => {
     const { view } = this.props;
     const { currentCarouselIndex } = this.state;
     let dateObj = new Date(this.state.current);
@@ -263,17 +263,15 @@ export default class Calendar extends Component<IProps, IState> {
       const nextWeek = formatDate(dateObj, 'day');
       current = nextWeek;
     }
-    if (fromClick) {
       this.setState({
         currentCarouselIndex: (currentCarouselIndex + 1) % 3,
         current
       });
-    }
     if (onClickNext) onClickNext();
     if (onCurrentViewChange) onCurrentViewChange(current);
   };
 
-  goPre = (fromClick: boolean = true) => {
+  goPre = () => {
     const { view } = this.props;
     const { currentCarouselIndex } = this.state;
     let dateObj = new Date(this.state.current);
@@ -291,12 +289,10 @@ export default class Calendar extends Component<IProps, IState> {
     const { onClickPre, onCurrentViewChange } = this.props;
     if (onClickPre) onClickPre();
     if (onCurrentViewChange) onCurrentViewChange(current);
-    if (fromClick) {
       this.setState({
         currentCarouselIndex: (currentCarouselIndex + 2) % 3,
         current
       });
-    }
   };
 
   render() {
@@ -452,10 +448,10 @@ export default class Calendar extends Component<IProps, IState> {
                 const currentIndex = e.detail.current;
                 if ((currentCarouselIndex + 1) % 3 === currentIndex) {
                   // 当前月份+1
-                  this.goNext(false);
+                  this.goNext();
                 } else {
                   // 当前月份-1
-                  this.goPre(false);
+                  this.goPre();
                 }
                 this.setState({ currentCarouselIndex: e.detail.current });
               }

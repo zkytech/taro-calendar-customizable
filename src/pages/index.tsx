@@ -33,7 +33,6 @@ const Index: FunctionComponent = () => {
         bindRef={ref => {
           setCalendarObj(ref);
         }}
-        startDay={2}
         hideController={hideController}
         currentView={currentView}
         onCurrentViewChange={setCurrentView}
