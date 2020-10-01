@@ -10,20 +10,9 @@ declare module '*.sass';
 declare module '*.styl';
 
 // @ts-ignore
-// eslint-disable-next-line no-unused-vars
-// declare const process: {
-//   env: {
-//     TARO_ENV:
-//       | 'weapp'
-//       | 'swan'
-//       | 'alipay'
-//       | 'h5'
-//       | 'rn'
-//       | 'tt'
-//       | 'quickapp'
-//       | 'qq';
-//     [key: string]: any;
-//   };
-// };
-
-
+declare const process: {
+  env: {
+    TARO_ENV: 'weapp' | 'swan' | 'alipay' | 'h5' | 'rn' | 'tt' | 'quickapp' | 'qq';
+    [key: string]: any;
+  }
+}

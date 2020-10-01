@@ -1,16 +1,12 @@
 {
   "name": "taro-calendar-customizable",
-  "version": "1.2.7",
+  "version": "2.0.0",
   "private": false,
   "description": "可自定义部分样式的taro日历组件",
   "templateInfo": {
     "name": "default",
     "typescript": true,
     "css": "less"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/zkytech/taro-calendar-customizable"
   },
   "scripts": {
     "build:weapp": "taro build --type weapp",
@@ -30,38 +26,42 @@
     "dev:qq": "npm run build:qq -- --watch",
     "dev:quickapp": "npm run build:quickapp -- --watch"
   },
+  "browserslist": [
+    "last 3 versions",
+    "Android >= 4.1",
+    "ios >= 8"
+  ],
   "author": "zkyTech",
-  "license": "MIT",
   "dependencies": {
-    "@tarojs/components": "1.3.13",
-    "@tarojs/taro": "1.3.13",
-    "@tarojs/taro-weapp": "^1.3.13"
+    "@babel/runtime": "^7.7.7",
+    "@tarojs/components": "3.0.0-rc.6",
+    "@tarojs/runtime": "3.0.0-rc.6",
+    "@tarojs/taro": "3.0.0-rc.6",
+    "@tarojs/react": "3.0.0-rc.6",
+    "react-dom": "^16.10.0",
+    "react": "^16.10.0"
   },
   "devDependencies": {
-    "@tarojs/plugin-babel": "1.3.13",
-    "@tarojs/plugin-csso": "1.3.13",
-    "@tarojs/plugin-less": "1.3.13",
-    "@tarojs/plugin-uglifyjs": "1.3.13",
-    "@tarojs/webpack-runner": "1.3.13",
-    "@types/react": "^16.4.6",
     "@types/webpack-env": "^1.13.6",
-    "@typescript-eslint/parser": "^1.6.0",
-    "babel-eslint": "^8.2.3",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-decorators-legacy": "^1.3.4",
-    "babel-plugin-transform-jsx-stylesheet": "^0.6.5",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "eslint": "^5.16.0",
-    "eslint-config-taro": "1.3.13",
-    "eslint-plugin-import": "^2.12.0",
+    "@types/react": "^16.0.0",
+    "@tarojs/mini-runner": "3.0.0-rc.6",
+    "@babel/core": "^7.8.0",
+    "@tarojs/webpack-runner": "3.0.0-rc.6",
+    "babel-preset-taro": "3.0.0-rc.6",
+    "eslint-config-taro": "3.0.0-rc.6",
+    "eslint": "^6.8.0",
     "eslint-plugin-react": "^7.8.2",
+    "eslint-plugin-import": "^2.12.0",
     "eslint-plugin-react-hooks": "^1.6.1",
-    "eslint-plugin-taro": "1.3.13",
     "stylelint": "9.3.0",
-    "stylelint-config-taro-rn": "1.3.13",
-    "stylelint-taro-rn": "1.3.13",
-    "typescript": "^3.0.1"
+    "@typescript-eslint/parser": "^2.x",
+    "@typescript-eslint/eslint-plugin": "^2.x",
+    "typescript": "^3.7.0"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zkytech/taro-calendar-customizable"
   },
   "main": "index.ts",
   "types": "index.d.ts",

@@ -1,7 +1,7 @@
 {
   "miniprogramRoot": "./dist",
   "projectname": "taro-calendar-customizable",
-  "description": "可定制的taro日历组件",
+  "description": "可自定义部分样式的taro日历组件",
   "appid": "touristappid",
   "setting": {
     "urlCheck": true,

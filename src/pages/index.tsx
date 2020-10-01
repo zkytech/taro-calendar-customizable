@@ -1,6 +1,7 @@
-import Taro, { FunctionComponent, useState } from '@tarojs/taro';
+import Taro from '@tarojs/taro';
+import React,{ FunctionComponent, useState } from 'react'
 import Calendar from './calendar/index';
-import { View, Button, Text, Switch } from '@tarojs/components';
+import { View, Button, Text, Switch ,Label} from '@tarojs/components';
 
 // TODO:整理一份api，用于快速创建日历，api为纯typescript项目，无任何依赖。
 
@@ -62,33 +63,49 @@ const Index: FunctionComponent = () => {
         设置view为2019-08
       </Button>
       <Button onClick={() => setSelected('2019-08-08')}>选中2019-08-08</Button>
-      <Switch
-        checked={isWeekView}
-        onChange={e => {
-          // @ts-ignore
-          setIsWeekView(e.target.value);
-        }}
-      >
-        周视图
-      </Switch>
-      <Switch
-        checked={hideController}
-        onChange={e => {
-          // @ts-ignore
-          setHideController(e.target.value);
-        }}
-      >
-        隐藏控制器
-      </Switch>
-      <Switch
-        checked={isLunar}
-        onChange={e => {
-          // @ts-ignore
-          setIsLunar(e.target.value);
-        }}
-      >
-        农历
-      </Switch>
+
+      <View>
+        
+        <Switch
+          id = "weekViewSwitch"
+          checked={isWeekView}
+          onChange={e => {
+            // @ts-ignore
+            setIsWeekView(e.target.value);
+          }}
+        >
+        </Switch>
+        <Label for="weekViewSwitch">周视图</Label>
+      </View>        
+      
+      <View> 
+        
+        <Switch
+          id = "hideSwitch"
+          checked={hideController}
+          onChange={e => {
+            // @ts-ignore
+            setHideController(e.target.value);
+          }}
+        >
+        </Switch>
+        <Label for="hideSwitch">隐藏控制器</Label>
+      </View> 
+      <View>
+        
+        <Switch
+          id = "lunarSwitch"
+          checked={isLunar}
+          onChange={e => {
+            // @ts-ignore
+            setIsLunar(e.target.value);
+          }}
+        >
+          
+        </Switch>
+        <Label for = "lunarSwitch">农历</Label>
+      </View>  
+
     </View>
   );
 };

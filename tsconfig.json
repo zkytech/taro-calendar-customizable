@@ -2,7 +2,6 @@
   "compilerOptions": {
     "target": "es2017",
     "module": "commonjs",
-    "allowJs": false,
     "removeComments": false,
     "preserveConstEnums": true,
     "moduleResolution": "node",
@@ -16,12 +15,15 @@
     "sourceMap": true,
     "baseUrl": ".",
     "rootDir": ".",
-    "jsx": "preserve",
-    "jsxFactory": "Taro.createElement",
+    "jsx": "react",
+    "jsxFactory": "React.createElement",
+    "allowJs": true,
     "resolveJsonModule": true,
-    "typeRoots": ["node_modules/@types", "global.d.ts"]
+    "typeRoots": [
+      "node_modules/@types",
+      "global.d.ts"
+    ]
   },
-  "exclude": ["node_modules", "dist","src/app.tsx","src/app.less","src/index.html","src/pages/index.tsx","config"],
+  "exclude": ["node_modules", "dist","src/app.ts","src/app.less","src/index.html","src/pages/index.tsx","config"],
   "compileOnSave": false
-
 }

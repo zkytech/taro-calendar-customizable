@@ -1,7 +1,6 @@
 import { View } from '@tarojs/components';
-import Taro, { FunctionComponent } from '@tarojs/taro';
 import './index.less';
-import { CSSProperties } from 'react';
+import React, { CSSProperties,FunctionComponent} from 'react';
 import { formatDate, indexOf, CalendarTools, LunarInfo } from '../utils';
 import { CalendarMark, ExtraInfo } from '../index';
 
@@ -237,7 +236,7 @@ const Days: FunctionComponent<DaysProps> = ({
   const startDateObj = new Date(selectedRange ? selectedRange.start : '');
   const endDateObj = new Date(selectedRange ? selectedRange.end : '');
   return (
-    <View className="calendar-body" style={bodyStyle}>
+    <View className="calendar-body" style={bodyStyle} key = {Math.random()}>
       {days.map(value => {
         const markIndex = indexOf(markDateList, value.fullDateStr);
         const extraInfoIndex = indexOf(extraInfoDateList, value.fullDateStr);
@@ -334,12 +333,12 @@ const Days: FunctionComponent<DaysProps> = ({
         }
         return (
           <View
+            key = {Math.random()}
             onLongPress={
               onDayLongPress
                 ? () => onDayLongPress({ value: value.fullDateStr })
                 : undefined
             }
-            key={value.fullDateStr}
             className={className.join(' ')}
             onClick={() => {
               if (!disable) {
@@ -349,6 +348,7 @@ const Days: FunctionComponent<DaysProps> = ({
             style={customStyles.containerStyle}
           >
             <View
+              
               className="calendar-date"
               style={
                 customStyles.dateStyle || customStyles.dateStyle === {}

@@ -1,5 +1,6 @@
 import { Picker, View, Swiper, SwiperItem } from '@tarojs/components';
-import Taro, { Component } from '@tarojs/taro';
+import Taro from '@tarojs/taro';
+import React,{ Component } from 'react'
 import './index.less';
 import { formatDate, fillWithZero } from './utils';
 import Days, {
@@ -120,9 +121,7 @@ const getWeekDayList = (startDay: number) => {
 };
 
 export default class Calendar extends Component<IProps, IState> {
-  config = {
-    navigationBarTitleText: ''
-  };
+
 
   state: IState = {
     current: formatDate(new Date(this.props.currentView as string)),
@@ -149,12 +148,12 @@ export default class Calendar extends Component<IProps, IState> {
     startDay: 0,
     extraInfo: []
   };
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     if (this.props.bindRef) {
       this.props.bindRef(this);
     }
   }
-  componentWillReceiveProps(nextProps: Readonly<IProps>): void {
+  UNSAFE_componentWillReceiveProps(nextProps: Readonly<IProps>): void {
     if (
       nextProps.selectedDate &&
       nextProps.selectedDate !== this.props.selectedDate
@@ -374,10 +373,7 @@ export default class Calendar extends Component<IProps, IState> {
 
     return (
       <View>
-        {hideController ? (
-          ''
-        ) : (
-          <View className="calendar-picker" style={{ ...pickerRowStyle }}>
+          <View className="calendar-picker" style={{ ...pickerRowStyle ,display:hideController?'none':"block"}}>
             {hideArrow ? (
               ''
             ) : (
@@ -425,7 +421,7 @@ export default class Calendar extends Component<IProps, IState> {
               />
             )}
           </View>
-        )}
+
 
         <View className="calendar-head" style={headStyle}>
           {getWeekDayList(startDay as number).map(value => (
@@ -458,13 +454,13 @@ export default class Calendar extends Component<IProps, IState> {
             }}
             className={'calendar-swiper'}
           >
-            <SwiperItem>
+            <SwiperItem style = "position: absolute; width: 100%; height: 100%;">
               <Days date={monthObj[0]} {...publicDaysProp} />
-            </SwiperItem>
-            <SwiperItem>
+            </SwiperItem >
+            <SwiperItem style = "position: absolute; width: 100%; height: 100%;">
               <Days date={monthObj[1]} {...publicDaysProp} />
             </SwiperItem>
-            <SwiperItem>
+            <SwiperItem style = "position: absolute; width: 100%; height: 100%;">
               <Days date={monthObj[2]} {...publicDaysProp} />
             </SwiperItem>
           </Swiper>
