@@ -1,6 +1,6 @@
 import { ComponentClass } from 'react';
 import { IProps } from './src/pages/calendar/index';
-import { CalendarToolResult } from './src/pages/calendar/utils';
+import { LunarInfo } from './src/pages/calendar/utils';
 
 export declare type CalendarMark = {
   /** 要标记的日期 */
@@ -15,7 +15,7 @@ export declare namespace CalendarTools {
   /** 公历转农历
    * @param date 日期字符串 YYYY-MM-DD
    */
-  export function solar2lunar(date: string): CalendarToolResult;
+  export function solar2lunar(date: string): LunarInfo;
   /** 农历转公历
    * @param y 年
    * @param m 月
@@ -27,7 +27,7 @@ export declare namespace CalendarTools {
     m: number,
     d: number,
     isLeapMonth: boolean
-  ): CalendarToolResult;
+  ): LunarInfo;
 }
 
 declare const Calendar: ComponentClass<IProps>;
