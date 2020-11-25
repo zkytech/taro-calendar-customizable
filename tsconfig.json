@@ -1,14 +1,13 @@
 {
   "compilerOptions": {
-    "target": "es2017",
-    "module": "commonjs",
+    "module": "es2015",
+    "target": "es2015",
     "removeComments": false,
     "preserveConstEnums": true,
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "noImplicitAny": false,
     "allowSyntheticDefaultImports": true,
-    "outDir": "lib",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "strictNullChecks": true,
