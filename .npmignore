@@ -1,0 +1,9 @@
+*.[aod]
+*.DS_Store
+.DS_Store
+*Thumbs.db
+*.iml
+.gradle
+.idea
+node_modules
+src/**/*.js.map
