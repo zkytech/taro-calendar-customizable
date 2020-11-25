@@ -29,7 +29,7 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - run: npm install
       - run: npm install -g @tarojs/cli
-      - run: npm build:weapp
+      - run: npm run build:weapp
       - run: npm ci
       - run: npm publish
         env:
