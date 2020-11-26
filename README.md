@@ -251,6 +251,54 @@ export default Index;
 
 ![结构图](src/preview/样式结构.png)
 
+
+#### <font color="red">重点:</font>
+
+给`customStyleGenerator`赋值的时候不要使用临时对象，否则性能会很差
+
+<font color="red">错误用法:</font>
+```
+<Calendar
+    ...
+    customStyleGenerator={
+        params => {
+            return {
+                containerStyle: {
+
+                }
+            };
+        }
+    }
+/>
+```
+
+<font color="red">正确用法:</font>
+```
+在引用Calendar的组件的外部创建const对象，然后赋值：
+
+const customStyleGenerator = params => {
+                     return {
+                         containerStyle: {
+         
+                         }
+                     };
+                 };
+export default class XXXX extends Component {
+    render () {
+        return (
+            ...
+            <Calendar
+                ...
+                customStyleGenerator={customStyleGenerator}
+            />
+        );
+    }
+}
+```
+
+
+
+
 ## 类型说明
 
 > ### StyleGeneratorParams
