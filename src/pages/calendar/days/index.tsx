@@ -219,6 +219,7 @@ const Days: FunctionComponent<DaysProps> = ({
 }) => {
   const [days, setDays] = useState<Array<CalendarDateInfo>>([]);
   const prevDateRef = useRef<Date>(null);
+  const prevViewRef = useRef<String>(null);
   const _onDayClick = useCallback((value)=>{
     onClick&&onClick(value);
   }, [onClick]);
@@ -230,7 +231,7 @@ const Days: FunctionComponent<DaysProps> = ({
   useEffect(()=>{
     //view和startDay基本不会变，就date会经常变化
     //由于传递的是date对象，需要判断date对象的值是否变化，防止因为days变化导致的重复刷新
-    if(!prevDateRef.current || formatDate(prevDateRef.current) !==  formatDate(date)) {
+    if(!prevDateRef.current || formatDate(prevDateRef.current) !==  formatDate(date) || prevViewRef.current !== view) {
       // @ts-ignore
       const dateObj = date ? new Date(date) : new Date();
       let tempDays: CalendarDateInfo[] = [];
@@ -244,6 +245,8 @@ const Days: FunctionComponent<DaysProps> = ({
     }
     //@ts-ignore
     prevDateRef.current = date;
+    //@ts-ignore
+    prevViewRef.current = view;
   }, [view, date, startDay ]);
 
 

@@ -24,6 +24,13 @@ const Index: FunctionComponent = () => {
           { value: '2019-08-16', color: 'pink', markSize: '9px' },
           { value: '2019-08-17', color: 'green', markSize: '9px' }
         ]}
+        customStyleGenerator={params=>{
+          return {
+            markStyle:{
+              
+            }
+          }
+        }}
         extraInfo={[
           { value: '2019-08-21', text: '生日', color: 'red' },
           { value: '2019-08-22', text: '休假', color: 'darkblue' },
