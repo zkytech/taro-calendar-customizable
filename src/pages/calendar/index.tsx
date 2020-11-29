@@ -172,14 +172,15 @@ export default class Calendar extends Component<IProps, IState> {
   }
 
   getPickerText = () => {
-    const { view } = this.props;
+    let { view,startDay } = this.props;
+    startDay = startDay as number
     const { current } = this.state;
     const currentDateObj = new Date(current);
     const monthStr = formatDate(currentDateObj, 'month');
 
     if (view === 'week') {
       currentDateObj.setDate(
-        currentDateObj.getDate() - currentDateObj.getDay()
+        currentDateObj.getDate() - (currentDateObj.getDay()>=startDay?currentDateObj.getDay() - startDay: 6-startDay+currentDateObj.getDay()) 
       );
       const weekStart = currentDateObj.getDate();
       const weekStartMonth = currentDateObj.getMonth() + 1;
