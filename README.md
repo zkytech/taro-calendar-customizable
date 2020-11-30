@@ -208,7 +208,7 @@ export default Index;
 | mode           | 显示模式，普通或农历                                                       | `"normal"`&#124;`"lunar"`                                        | `"normal"`       |
 | view           | 视图模式                                                                   | `"week"`&#124;`"month"`                                          | `"month"`        |
 | selectedDate   | 当前选中的时间，格式：`YYYY-MM-DD`                                         | `string`                                                         | `Date.now()`     |
-| currentView    | 当前视图显示的月份`YYYY-MM`                                                | `string`                                                         | 当前系统时间年月 |
+| currentView    | 月视图时为当前视图显示的月份`YYYY-MM`，周视图下为当前显示的周内的某一天`YYYY-MM-DD`                                                | `string`                                                         | 当前系统时间年月 |
 | minDate        | 最小的可选时间，格式：`YYYY-MM-DD`                                         | `string`                                                         | `1970-01-01`     |
 | maxDate        | 最大的可选时间，格式：`YYYY-MM-DD`                                         | `string`                                                         | `null`           |
 | isSwiper       | 是否可以滑动                                                               | `boolean`                                                        | `true`           |
@@ -238,7 +238,7 @@ export default Index;
 | -------------------- | -------------------------------- | ------------------------------------------------------------------------------------------ |
 | selectedDateColor    | 选中日期的颜色                   | `string`                                                                                   |
 | customStyleGenerator | 单元格样式生成器                 | (dateInfo:[StyleGeneratorParams](#StyleGeneratorParams) ) => [CustomStyles](#CustomStyles) |
-| pickerTextGenerator  | 日期选择器文本的生成器           | `(currentView:Date)=>string`                                                               |
+| pickerTextGenerator  | 日期选择器文本的生成器，参数为：当前视图中的任意一天           | `(currentView:Date)=>string`                                                               |
 | headStyle            | head 整体样式                    | `CSSProperties`                                                                            |
 | headCellStyle        | head 单元格样式                  | `CSSProperties`                                                                            |
 | bodyStyle            | body 整体样式                    | `CSSProperties`                                                                            |
